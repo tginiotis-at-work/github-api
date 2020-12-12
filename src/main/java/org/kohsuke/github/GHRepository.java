@@ -1067,6 +1067,35 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * @see GHRepository#merge(String, String, String)
+     */
+    public GHCommit merge(String base, String head) throws IOException {
+        return merge(base, head, null);
+    }
+
+    /**
+     * Merges the head into the base.
+     *
+     * @param base
+     *            The name of the base branch that the head will be merged into.
+     * @param head
+     *            The head to merge. This can be a branch name or a commit SHA1.
+     * @param commitMessage
+     *            Commit message to use for the merge commit. If null, a default message will be used.
+     * @return the merge commit
+     */
+    public GHCommit merge(String base, String head, String commitMessage) throws IOException {
+        return root.createRequest()
+                .method("POST")
+                .with("base", base)
+                .with("head", head)
+                .with("commit_message", commitMessage)
+                .withUrlPath(getApiTailUrl("merges"))
+                .fetch(GHCommit.class)
+                .wrapUp(this);
+    }
+
+    /**
      * Sets email service hook.
      *
      * @param address
