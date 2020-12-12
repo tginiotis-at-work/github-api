@@ -287,6 +287,18 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void mergeSuccess() throws IOException {
+        GHRepository repository = getRepository();
+        GHRef ref = repository.createRef("refs/heads/mergeTest", "3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353");
+
+        GHCommit mergeCommit = repository.merge(ref.getRef(), "b036909fcf45565c82c888ee326ebd0e382f6173");
+
+        assertNotNull("Merge commit created", mergeCommit);
+
+        ref.delete();
+    }
+
+    @Test
     public void listCommitCommentsNoComments() throws IOException {
         List<GHCommitComment> commitComments = getRepository()
                 .listCommitComments("c413fc1e3057332b93850ea48202627d29a37de5")
